@@ -2,11 +2,11 @@ import tkinter
 from tkinter import filedialog as fd
 
 import matplotlib.pyplot as plt
-plt.rcParams['text.usetex'] = True
+# plt.rcParams['text.usetex'] = True
 from matplotlib import rc
 rc('font',**{'family':'serif'})
-rc('text.latex',preamble="\\usepackage[utf8]{inputenc}")
-rc('text.latex',preamble="\\usepackage[russian]{babel}")
+# rc('text.latex',preamble="\\usepackage[utf8]{inputenc}")
+# rc('text.latex',preamble="\\usepackage[russian]{babel}")
 
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
@@ -74,7 +74,7 @@ def plot_spectrum():
     else:
         ax.plot(data_si[:, 0], data_si[:, 1], c='r', label='подложка')
         ax.plot(data_o[:, 0], data_o[:, 1], c='b', label='плёнка')
-    ax.set_xlabel("$\lambda, \;$" + "нм")
+    ax.set_xlabel("длина волны, нм")
     ax.grid()
     ax.legend()
     spec_canvas.draw()
@@ -93,7 +93,7 @@ fig = Figure(figsize=(5, 4), dpi=80)
 ax = fig.add_subplot(111)
 ax.scatter([0.0],[0.0],c='r', label='подложка')
 ax.scatter([0.0],[0.0],c='b', label='плёнка')
-ax.set_xlabel("$\lambda, \;$"+"нм")
+ax.set_xlabel("длина волны, нм")
 ax.grid()
 ax.legend()
 # Отрисовка графика средствами matplotlib
@@ -101,7 +101,7 @@ fig_calc = Figure(figsize=(5, 4), dpi=80)
 ax_calc = fig_calc.add_subplot(111)
 ax_calc.scatter([0.0],[0.0],c='r', label='теория')
 ax_calc.scatter([0.0],[0.0],c='b', label='эксперимент')
-ax_calc.set_xlabel("$1 / \lambda, \;$"+"нм**(-1)")
+ax_calc.set_xlabel("обратная длина волны, нм^(-1)")
 ax_calc.grid()
 ax_calc.legend()
 
@@ -140,7 +140,7 @@ def plot_calc():
     ax_calc.clear()
     ax_calc.plot(1/L,R,c='r', label='теория')
     ax_calc.plot(1/data_o[ll_idx:lr_idx,0],data_o[ll_idx:lr_idx,1]/data_si[ll_idx:lr_idx,1],c='b',label="эксперимент")
-    ax_calc.set_xlabel("$1 / \lambda, \;$" + "нм**(-1)")
+    ax_calc.set_xlabel("обратная длина волны, нм^(-1)")
     ax_calc.grid()
     ax_calc.legend()
     calc_canvas.draw()
