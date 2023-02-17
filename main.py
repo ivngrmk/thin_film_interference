@@ -154,17 +154,17 @@ def plot_calc():
     L = (2 * np.pi / K) * 10 ** 9
     ax_calc.clear()
     # ax_calc.plot(1/L,R,c='r', label='теория')
-    ax_calc.plot(1/data_o[ll_idx:lr_idx,0],data_o[ll_idx:lr_idx,1]/data_si[ll_idx:lr_idx,1],c='b',label="эксперимент")
-    xlims = (0.00125,0.0025)
-    l_idx = np.argmin(abs((1/data_o[:,0])-xlims[1]))
-    r_idx = np.argmin(abs((1/data_o[:,0])-xlims[0]))
+    xlims = (0.0016,0.0023)
+    l_idx = np.argmin(abs((1/data_o[:,0])-xlims[1]))+1
+    r_idx = np.argmin(abs((1/data_o[:,0])-xlims[0]))-1
     print(l_idx,r_idx)
     ymin = min( data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1] )
     ymax = max( data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1] )
     th_ymin = min(R)
     th_ymax = max(R)
     exp_data = data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1]
-    R = sum(exp_data)/len(exp_data) + (R-sum(R)/len(R))*(ymax-ymin)/(th_ymax-th_ymin)
+    R = (ymax+ymin)/2 + (R-sum(R)/len(R))*(ymax-ymin)/(th_ymax-th_ymin)
+    ax_calc.plot(1/data_o[l_idx:r_idx,0],data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1],c='b',label="эксперимент")
     ax_calc.plot(1/L,R,c='r', label='теория')
     ax_calc.set_xlim(xlims[0],xlims[1])
     ax_calc.set_ylim( min(ymin,min(R)) , max(ymax,max(R)) )
