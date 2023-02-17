@@ -1,6 +1,8 @@
 import tkinter
 from tkinter import filedialog as fd
 
+import os
+
 import matplotlib.pyplot as plt
 # plt.rcParams['text.usetex'] = True
 from matplotlib import rc
@@ -35,12 +37,24 @@ norm_spec_but = tkinter.Checkbutton(choose_spec_frame, text="Нормирова�
                                     onvalue=1,offvalue=0, variable=norm_spec)
 norm_spec_but.grid(row=5,column=0)
 
+def comma_to_dot(fn):
+    file = open(fn,'r')
+    resulting_file = ""
+    for line in file:
+    	if line[0].isdigit():
+            resulting_file += line.replace(',','.') + "\n"
+    file.close()
+    os.remove(fn)
+    file = open(fn,'w')
+    file.write(resulting_file)
+    file.close()
 
 def choose_si_spec():
     si_name = fd.askopenfilename()
     global data_si
     global norm_data_si
     global norm_si
+    comma_to_dot(si_name)
     data_si = np.loadtxt(si_name)
     norm_data_si = data_si.copy()
     norm_si = 0.0
@@ -56,6 +70,7 @@ def choose_o_spec():
     global data_o
     global norm_data_o
     global norm_o
+    comma_to_dot(o_name)
     data_o = np.loadtxt(o_name)
     norm_data_o = data_o.copy()
     norm_o = 0.0
@@ -138,8 +153,21 @@ def plot_calc():
         R[i] = r
     L = (2 * np.pi / K) * 10 ** 9
     ax_calc.clear()
-    ax_calc.plot(1/L,R,c='r', label='теория')
+    # ax_calc.plot(1/L,R,c='r', label='теория')
     ax_calc.plot(1/data_o[ll_idx:lr_idx,0],data_o[ll_idx:lr_idx,1]/data_si[ll_idx:lr_idx,1],c='b',label="эксперимент")
+    xlims = (0.00125,0.0025)
+    l_idx = np.argmin(abs((1/data_o[:,0])-xlims[1]))
+    r_idx = np.argmin(abs((1/data_o[:,0])-xlims[0]))
+    print(l_idx,r_idx)
+    ymin = min( data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1] )
+    ymax = max( data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1] )
+    th_ymin = min(R)
+    th_ymax = max(R)
+    exp_data = data_o[l_idx:r_idx,1]/data_si[l_idx:r_idx,1]
+    R = sum(exp_data)/len(exp_data) + (R-sum(R)/len(R))*(ymax-ymin)/(th_ymax-th_ymin)
+    ax_calc.plot(1/L,R,c='r', label='теория')
+    ax_calc.set_xlim(xlims[0],xlims[1])
+    ax_calc.set_ylim( min(ymin,min(R)) , max(ymax,max(R)) )
     ax_calc.set_xlabel("обратная длина волны, нм^(-1)")
     ax_calc.grid()
     ax_calc.legend()
@@ -169,7 +197,8 @@ calc_frame_label.grid(row=2,column=1)
 
 def _quit():
     root.quit()     # stops mainloop
-    root.destroy()  # this is necessary on Windows to prevent
+    root.destroy()  
+# this is necessary on Windows to prevent
                     # Fatal Python Error: PyEval_RestoreThread: NULL tstate
 
 button = tkinter.Button(master=root, text="Quit", command=_quit)
