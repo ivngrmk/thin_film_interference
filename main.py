@@ -130,8 +130,8 @@ calc_canvas.get_tk_widget().grid(row=3, column=1)
 
 
 def plot_calc():
-    n = float(n_field.get())
-    nr = float(nr_field.get())
+    n  = float( n_field.get().resplace(',','.'))
+    nr = float(nr_field.get().resplace(',','.'))
     h = float(h_field.get())*10**(-9)
     min_idx = int(len(data_o[:, 0]) * 0.08)
     ll_idx = min_idx
