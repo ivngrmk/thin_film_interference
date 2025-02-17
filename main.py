@@ -130,8 +130,8 @@ calc_canvas.get_tk_widget().grid(row=3, column=1)
 
 
 def plot_calc():
-    n  = float( n_field.get().resplace(',','.'))
-    nr = float(nr_field.get().resplace(',','.'))
+    n  = float( n_field.get().replace(',','.'))
+    nr = float(nr_field.get().replace(',','.'))
     h = float(h_field.get())*10**(-9)
     min_idx = int(len(data_o[:, 0]) * 0.08)
     ll_idx = min_idx
@@ -205,5 +205,7 @@ button = tkinter.Button(master=root, text="Quit", command=_quit)
 button.grid(row=7, column=0)
 
 tkinter.mainloop()
+print("AAA")
 # If you put root.destroy() here, it will cause an error if the window is
 # closed with the window manager.
+input('Press ENTER to exit')

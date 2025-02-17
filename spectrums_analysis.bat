@@ -1,0 +1,1 @@
+python -u -i C:\Users\ivngrmk\Desktop\ThinFilms\thin_film_interference\main.py
